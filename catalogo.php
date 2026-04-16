@@ -18,32 +18,32 @@ $db = new DataBase();
 <?php
         
       // Query base
-$sql = "SELECT articoli.*, reparto.descrizione as desReparto 
-        FROM articoli 
-        JOIN reparto ON articoli.codrep = reparto.codrep 
-        JOIN iva ON articoli.codiva = iva.codiva 
+$sql = "SELECT articolo.*, reparto.descrizione as desReparto 
+        FROM articolo 
+        JOIN reparto ON articolo.id_reparto = reparto.id_reparto 
+        JOIN iva ON articolo.id_iva = iva.id_iva 
         WHERE 1=1";
 $msg= "Filtro = ";
 // Applichiamo i filtri se inviati tramite POST
 if (isset($_POST['btnFiltra'])) {
-    if (!empty($_POST['codart'])) {
-        $cod = $_POST['codart'];
-        $sql .= " AND articoli.codart LIKE '%$cod%'";
-        $msg.= " codart = $cod ";
+    if (!empty($_POST['id_articolo'])) {
+        $cod = $_POST['id_articolo'];
+        $sql .= " AND articolo.id_articolo = $cod";
+        $msg.= " id_articolo = $cod ";
     }
     if (!empty($_POST['descrizione'])) {
         $des = ($_POST['descrizione']);
-        $sql .= " AND articoli.desart LIKE '%$des%'";
+        $sql .= " AND articolo.descrizione LIKE '%$des%'";
         $msg.= " Descrizione = $des ";
     }
     if (!empty($_POST['ean'])) {
         $bar = $_POST['ean'];
-        $sql .= " AND articoli.barcode LIKE '%$bar%'";
-        $msg.= " Descrizione = $des ";
+        $sql .= " AND ean.id_ean LIKE '%$bar%'";
+        $msg.= " Barcode = $bar ";
     }
-    if (!empty($_POST['codrep'])) {
-        $rep = $_POST['codrep'];
-        $sql .= " AND articoli.codrep = '$rep'";
+    if (!empty($_POST['id_reparto'])) {
+        $rep = $_POST['id_reparto'];
+        $sql .= " AND articolo.id_reparto = $rep";
     }
 }
 
@@ -63,7 +63,7 @@ $totale_articoli = $rs->num_rows;
 
         <?php
 // Recupero tutti i reparti per la select del filtro
-$sqlReparti = "SELECT codrep, descrizione FROM reparto ORDER BY descrizione";
+$sqlReparti = "SELECT id_reparto, descrizione FROM reparto ORDER BY descrizione";
 $rsReparti = $db->query($sqlReparti);
 ?>
         <!-- form ricerca -->
@@ -73,7 +73,7 @@ $rsReparti = $db->query($sqlReparti);
         <form action="" method="POST" >
             <div class="row g-3">
                 <div class="col-md-2">
-                    <input type="text" name="codart" class="form-control" placeholder="Cod. Articolo" value="<?php echo $_POST['codart'] ?? ''; ?>">
+                    <input type="text" name="id_articolo" class="form-control" placeholder="Cod. Articolo" value="<?php echo $_POST['id_articolo'] ?? ''; ?>">
                 </div>
                 <div class="col-md-3">
                     <input type="text" name="descrizione" class="form-control" placeholder="Descrizione..." value="<?php echo $_POST['descrizione'] ?? ''; ?>">
@@ -82,10 +82,10 @@ $rsReparti = $db->query($sqlReparti);
                     <input type="text" name="ean" class="form-control" placeholder="Barcode" value="<?php echo $_POST['ean'] ?? ''; ?>">
                 </div>
                 <div class="col-md-3">
-                    <select name="codrep" class="form-select">
+                    <select name="id_reparto" class="form-select">
                         <option value="">Tutti i Reparti</option>
                         <?php while($rep = $rsReparti->fetch_assoc()): ?>
-                            <option value="<?php echo $rep['codrep']; ?>" <?php echo (isset($_POST['codrep']) && $_POST['codrep'] == $rep['codrep']) ? 'selected' : ''; ?>>
+                            <option value="<?php echo $rep['id_reparto']; ?>" <?php echo (isset($_POST['id_reparto']) && $_POST['id_reparto'] == $rep['id_reparto']) ? 'selected' : ''; ?>>
                                 <?php echo $rep['descrizione']; ?>
                             </option>
                         <?php endwhile; ?>
@@ -127,13 +127,13 @@ $rsReparti = $db->query($sqlReparti);
                     </a>
                     </td>
                     <td><?php echo $riga['desReparto']; ?></td>
-                    <td><?php echo $riga['codart']; ?></td>
-                    <td><?php echo $riga['desart']; ?></td>
-                    <td><?php echo $riga['um']; ?></td>
-                    <td><?php echo $riga['przacq']; ?></td>
-                    <td><?php echo $riga['codiva']; ?></td>
-                    <td><?php echo $riga['przven']; ?></td>
-                    <td><input style="width: 100px;" Class="form-control" type="number" id="<?php echo $riga['codart']; ?>" name="qta[<?php echo $riga['codart']; ?>]"></td> 
+                    <td><?php echo $riga['id_articolo']; ?></td>
+                    <td><?php echo $riga['descrizione']; ?></td>
+                    <td><?php echo $riga['unità_di_misura']; ?></td>
+                    <td><?php echo $riga['prezzo_acquisto']; ?></td>
+                    <td><?php echo $riga['id_iva']; ?></td>
+                    <td><?php echo $riga['prezzo_vendita']; ?></td>
+                    <td><input style="width: 100px;" Class="form-control" type="number" id="<?php echo $riga['id_articolo']; ?>" name="qta[<?php echo $riga['id_articolo']; ?>]"></td>  
                     
                     
                 </tr>
