@@ -98,8 +98,8 @@ $db = new DataBase();
     </div>
 
     <script>
-    function caricaDati(codrep, descrizione) {
-        document.getElementById('id_reparto').value = codrep;
+    function caricaDati(id_reparto, descrizione) {
+        document.getElementById('id_reparto').value = id_reparto;
         document.getElementById('descrizione').value = descrizione;
         // Impedisce la modifica del codice reparto (chiave primaria) in fase di update
         document.getElementById('id_reparto').setAttribute('readonly', true);
