@@ -24,9 +24,7 @@ $db = new DataBase();
        
             $codice =  $riga[0] ;
             $descrizione =  $riga[1];
-                   
-         echo "Codice: $codice - Descrizione: $descrizione";
-         echo "<br>";
+                  
 
           $sql ="INSERT INTO reparto (id_reparto, descrizione)
           VALUES ($codice, '$descrizione')
